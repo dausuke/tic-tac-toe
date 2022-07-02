@@ -12,28 +12,6 @@ const Game = () => {
   const [stepNumber, setStepNumber] = useState(0);
   const [status, setStatus] = useState("");
 
-  const handleClick = (boardNumber) => {
-    const history = histories.slice(0, stepNumber + 1);
-    const current = history[history.length - 1];
-    const squares = [...current.squares];
-    const winner = calculateWinner(current.squares);
-
-    if (winner || squares[boardNumber]) {
-      return;
-    }
-
-    squares[boardNumber] = xIsNext ? "X" : "O";
-
-    setHistories([...history, ...[{ squares: squares }]]);
-    setStepNumber(history.length);
-    setXIsNext(!xIsNext);
-  };
-
-  const jumpTo = (step) => {
-    setStepNumber(step);
-    setXIsNext(step % 2 === 0);
-  };
-
   const calculateWinner = (squares) => {
     const lines = [
       [0, 1, 2],
@@ -59,6 +37,28 @@ const Game = () => {
     }
 
     return null;
+  };
+
+  const handleClick = (boardNumber) => {
+    const newHistory = histories.slice(0, stepNumber + 1);
+    const latestHistory = newHistory[newHistory.length - 1];
+    const squares = [...latestHistory.squares];
+    const winner = calculateWinner(latestHistory.squares);
+
+    if (winner || squares[boardNumber]) {
+      return;
+    }
+
+    squares[boardNumber] = xIsNext ? "X" : "O";
+
+    setHistories([...newHistory, ...[{ squares: squares }]]);
+    setStepNumber(newHistory.length);
+    setXIsNext(!xIsNext);
+  };
+
+  const jumpTo = (step) => {
+    setStepNumber(step);
+    setXIsNext(step % 2 === 0);
   };
 
   useEffect(() => {
