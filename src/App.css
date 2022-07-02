@@ -2,10 +2,9 @@
   text-align: center;
 }
 
-.board-row:after {
-  clear: both;
-  content: "";
-  display: table;
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
 }
 
 .status {
@@ -15,16 +14,15 @@
 .square {
   background: #fff;
   border: 1px solid #999;
-  float: left;
   font-size: 24px;
   font-weight: bold;
   line-height: 34px;
+	text-align: center;
   height: 34px;
+	width: 34px;
   margin-right: -1px;
   margin-top: -1px;
   padding: 0;
-  text-align: center;
-  width: 34px;
 }
 
 .square:focus {

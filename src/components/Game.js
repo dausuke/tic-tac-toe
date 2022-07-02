@@ -3,33 +3,28 @@ import Board from "./Board";
 import "../App.css";
 
 const Game = () => {
-  const [history, setHistory] = useState([
+  const [histories, setHistories] = useState([
     {
       squares: Array(9).fill(null),
     },
   ]);
-  const [stepNumber, setStepNumber] = useState(0);
   const [xIsNext, setXIsNext] = useState(true);
+  const [stepNumber, setStepNumber] = useState(0);
   const [status, setStatus] = useState("");
-  const currentHistory = history.slice(0, stepNumber + 1);
 
-  const handleClick = (i) => {
-    const current = currentHistory[currentHistory.length - 1];
-    const squares = current.squares.slice();
+  const handleClick = (boardNumber) => {
+    const history = histories.slice(0, stepNumber + 1);
+    const current = history[history.length - 1];
+    const squares = [...current.squares];
     const winner = calculateWinner(current.squares);
 
-    if (winner || squares[i]) {
+    if (winner || squares[boardNumber]) {
       return;
     }
 
-    squares[i] = xIsNext ? "X" : "O";
-    const nextHistory = history.concat([
-      {
-        squares: squares,
-      },
-    ]);
+    squares[boardNumber] = xIsNext ? "X" : "O";
 
-    setHistory(nextHistory);
+    setHistories([...history, ...[{ squares: squares }]]);
     setStepNumber(history.length);
     setXIsNext(!xIsNext);
   };
@@ -67,28 +62,26 @@ const Game = () => {
   };
 
   useEffect(() => {
-    const current = history[stepNumber];
+    const current = histories[stepNumber];
     const winner = calculateWinner(current.squares);
 
-    if (winner) {
-      setStatus("Winner: " + winner);
-    } else {
-      setStatus("Next player: " + (xIsNext ? "X" : "O"));
-    }
-  }, [history, stepNumber, xIsNext]);
+    winner
+      ? setStatus("Winner: " + winner)
+      : setStatus("Next player: " + (xIsNext ? "X" : "O"));
+  }, [histories, stepNumber, xIsNext]);
 
   return (
     <div className="game">
       <div className="game-board">
         <Board
-          squares={currentHistory[currentHistory.length - 1].squares}
+          squares={histories[stepNumber].squares}
           onClick={(i) => handleClick(i)}
         />
       </div>
       <div className="game-info">
         <div>{status}</div>
         <ol>
-          {history.map((_, move) => (
+          {histories.map((_, move) => (
             <li key={move}>
               <button onClick={() => jumpTo(move)}>
                 {move ? "Go to move #" + move : "Go to game start"}

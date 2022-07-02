@@ -1,3 +1,4 @@
+// import Game from "./practise/Game";
 import Game from "./components/Game";
 
 function App() {
