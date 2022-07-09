@@ -1,9 +1,9 @@
-import "../App.css";
+import '../App.css';
 
-const Square = (props) => {
+const Square = porps => {
   return (
-    <button className="square" onClick={props.onClick}>
-      {props.value}
+    <button className="square" onClick={porps.onClick}>
+      {porps.value}
     </button>
   );
 };
